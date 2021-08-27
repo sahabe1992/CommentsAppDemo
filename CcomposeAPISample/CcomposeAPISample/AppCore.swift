@@ -65,6 +65,7 @@ let appRedducer : Reducer<AppState, AppAction, AppEnvironment> = .combine(
         switch action {
         case .loadComments: return env
             .getComments()
+            .receive(on: env.mainQueue)
             .catchToEffect({
                             result in
                             AppAction.commentsLoaded(
