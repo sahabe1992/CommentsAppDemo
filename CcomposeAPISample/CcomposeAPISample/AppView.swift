@@ -13,7 +13,17 @@ struct AppView: View {
         WithViewStore(store) { viewStore in
             NavigationView{
                 TabView{
-                    CommentsView(store: self.store.scope(state: \.commentState, action: AppAction.commentAction))
+                    IfLetStore(
+                        store.scope(state: \.commentsState, action: AppAction.commentAction),
+                        then: CommentsView.init(store:),
+                      else: {
+                       
+                        Text("Loading search results...")
+                            .onAppear(perform: {
+                                viewStore.send(AppAction.loadComments)
+                            })
+                      }
+                    )
                         .tabItem{
                             Image(systemName: "message")
                             Text("Comments")
@@ -33,10 +43,10 @@ struct AppView: View {
     }
 }
 
-struct AppView_Previews: PreviewProvider {
-    static var previews: some View {
-       
-        
-        AppView(store: Store(initialState: AppState(commentState: CommentsState()), reducer: appRedducer, environment: AppEnvironment(getComments: Provider.shared.getComments().eraseToEffect(), mainQueue: .main)))
-    }
-}
+//struct AppView_Previews: PreviewProvider {
+//    static var previews: some View {
+//
+//
+//        AppView(store: Store(initialState: AppState(commentState: CommentsState()), reducer: appRedducer, environment: AppEnvironment(getComments: Provider.shared.getComments.eraseToEffect(), mainQueue: .main)))
+//    }
+//}
