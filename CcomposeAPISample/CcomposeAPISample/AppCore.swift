@@ -10,9 +10,7 @@ import ComposableArchitecture
 import Combine
 
 struct AppState: Equatable {
-    
-    var commentState: CommentState
-    
+    var commentState: CommentLoadingState
     var commentsState: CommentsState?{
         get {
             switch commentState {
@@ -32,6 +30,9 @@ struct AppState: Equatable {
         }
     }
     
+    var postCommentState: PostCommentState
+    
+    
     
 }
 
@@ -39,6 +40,7 @@ enum AppAction {
     case commentAction(CommentsAction)
     case loadComments
     case commentsLoaded([Comments])
+    case postComment(PostCommentAction)
 }
 
 struct AppEnvironment {
@@ -57,6 +59,13 @@ let appRedducer : Reducer<AppState, AppAction, AppEnvironment> = .combine(
                                 environment.getComments,
                                  mainQueue: environment.mainQueue
             )
+        }
+    ),
+    settingsReducer.pullback(
+        state: \.postCommentState,
+        action: /AppAction.postComment,
+        environment:  { environment in
+            Environment()
         }
     ),
     .init
@@ -78,7 +87,7 @@ let appRedducer : Reducer<AppState, AppAction, AppEnvironment> = .combine(
                     DetailState(id: UUID(), comment: $0)
                 }
             )
-            state.commentState = CommentState.Loadded(
+            state.commentState = CommentLoadingState.Loadded(
                 CommentsState.init(comments:cardItems)
             )
             return .none

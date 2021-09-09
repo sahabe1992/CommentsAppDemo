@@ -29,7 +29,7 @@ struct AppView: View {
                             Text("Comments")
                         }
                     
-                    PostComments()
+                    PostComments(store: store.scope(state: \.postCommentState, action: AppAction.postComment))
                         .tabItem{
                             Image(systemName: "plus")
                             Text("Comments")

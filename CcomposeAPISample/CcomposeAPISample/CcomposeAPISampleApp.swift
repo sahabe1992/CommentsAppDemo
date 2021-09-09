@@ -12,7 +12,7 @@ struct CcomposeAPISampleApp: App {
     let dataManager = DataManager()
     var body: some Scene {
         WindowGroup {
-            AppView(store: Store(initialState: AppState(commentState: CommentState.Loading), reducer: appRedducer, environment: AppEnvironment(getComments: dataManager.commentsRepo.getAll, mainQueue: .main)))
+            AppView(store: Store(initialState: AppState(commentState: CommentLoadingState.Loading, postCommentState: PostCommentState()), reducer: appRedducer, environment: AppEnvironment(getComments: dataManager.commentsRepo.getAll, mainQueue: .main)))
         }
     }
 }

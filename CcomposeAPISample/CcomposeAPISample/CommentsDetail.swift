@@ -13,6 +13,12 @@ struct CommentsDetail: View {
     var body: some View {
         WithViewStore(store) { viewstore in
             Text(viewstore.comment.email ?? "")
+            Button("Hello World") {
+                print(type(of: self.body))
+
+            }
+            .frame(width: 200, height: 200)
+            .background(Color.red)
         }
        
     }

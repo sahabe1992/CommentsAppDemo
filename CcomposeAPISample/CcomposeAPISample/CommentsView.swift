@@ -73,7 +73,7 @@ let commentsReducer = Reducer<CommentsState, CommentsAction, CommentsEnvironment
 }
 
 
-enum CommentState:Equatable {
+enum CommentLoadingState:Equatable {
     case NotLoaded
     case Loading
     case Loadded(CommentsState)
